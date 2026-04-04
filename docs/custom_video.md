@@ -69,12 +69,52 @@ python prep/run_sam3_masks.py \
 
 ## Step 2: Object Reconstruction
 
-Use Hunyuan3D or SAM3D to reconstruct the object mesh. Place the output under `<hy3d_root>`.
+Use Hunyuan3D or SAM3D to reconstruct the object mesh. Place the output under `<hy3d_root>`. Step by step instruction:
 
+- Extract first frame RGB and object mask, remove the background, and crop a square around the object with 0.20 border margin, save the result image as one RGBA png file. Note if object is heavily occluded in the first frame, we recommend using another frame in the image for better object reconstruction. 
+- Run Hunyuan3D/SAM3D with the RGBA image as input,  reconstruct 3D and convert glb to obj file. 
 - **Mesh path convention:** `<seq>*_<frame_index:03d>_rgba/<seq>*_<frame_index:03d>_align.obj`
   where `frame_index` is the video frame used for reconstruction.
-- Hunyuan3D expects clean-background images — use the masks from Step 1 to remove the background, and crop a square around the object with 0.2 border margin.
-- The mesh should be in normalized scale (longest axis in `[-1, 1]`, direct Hunyuan3D output result). Metric-scale estimation is done later using UniDepth.
+- The mesh should be in normalized scale (longest axis in `[-1, 1]`,  direct Hunyuan3D output result). Metric-scale estimation is done later using UniDepth.
+
+### Example with `run_hy3d_recon.py` 
+
+We provide `prep/run_hy3d_recon.py` which automates the full pipeline: RGBA extraction from video + masks, Hunyuan3D shape and texture generation, and GLB-to-OBJ conversion.
+
+**Setup** (use a separate env from CARI4D, requires diffusers 0.31.0):
+
+```bash
+# 1. Create and activate a Hunyuan3D environment
+conda create -n hy3d python=3.10 && conda activate hy3d
+
+# 2. Install Hunyuan3D-2 (follow https://github.com/Tencent/Hunyuan3D-2)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+pip install git+https://github.com/Tencent/Hunyuan3D-2.git
+# Or clone and install locally:
+# git clone https://github.com/Tencent/Hunyuan3D-2.git && cd Hunyuan3D-2 && pip install -e .
+
+# 3. Install additional dependencies
+pip install h5py opencv-python
+
+# 4. Ensure Blender 3.6+ is available for GLB-to-OBJ conversion
+#    Download from https://www.blender.org/download/ if needed
+```
+
+**Example:**
+
+```bash
+python prep/run_hy3d_recon.py \
+    --video data/cari4d-demo/wild/videos/Date03_Sub01_gas_wild002.0.color.mp4 \
+    --masks_root data/cari4d-demo/wild/masks \
+    --hy3d_root data/cari4d-demo/meshes \
+    --blender_path /path/to/blender
+```
+
+**Notes:**
+- By default uses frame 0 for reconstruction. If the object is heavily occluded in the first frame, specify `--frame_index N` to use a different frame.
+- Use `--skip_hy3d` to only extract the RGBA image (e.g. for manual inspection before running reconstruction).
+- Use `--skip_glb2obj` to skip the Blender conversion step (e.g. if you want to inspect the GLB first).
+- The script skips processing if the output OBJ already exists.
 
 ---
 
