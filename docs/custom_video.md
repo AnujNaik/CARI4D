@@ -74,7 +74,7 @@ Use Hunyuan3D or SAM3D to reconstruct the object mesh. Place the output under `<
 - **Mesh path convention:** `<seq>*_<frame_index:03d>_rgba/<seq>*_<frame_index:03d>_align.obj`
   where `frame_index` is the video frame used for reconstruction.
 - Hunyuan3D expects clean-background images — use the masks from Step 1 to remove the background, and crop a square around the object with 0.2 border margin.
-- The mesh should be in normalized scale (longest axis in `[-1, 1]`). Metric-scale estimation is done later using UniDepth.
+- The mesh should be in normalized scale (longest axis in `[-1, 1]`, direct Hunyuan3D output result). Metric-scale estimation is done later using UniDepth.
 
 ---
 
