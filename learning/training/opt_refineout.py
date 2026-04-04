@@ -28,6 +28,7 @@ from pytorch3d.renderer import look_at_view_transform
 import torch.nn.functional as F
 from VolumetricSMPL import attach_volume
 from lib_smpl.body_landmark import BodyLandmarks
+from lib_smpl.body_landmark_coco import CocoBodyLandmarks
 from lib_smpl.th_hand_prior import mean_hand_pose, SMPL_ASSETS_ROOT
 from lib_smpl.const import SMPL_MODEL_ROOT
 from behave_data.behave_video import BaseBehaveVideoData, VideoController
@@ -256,8 +257,13 @@ class RefineOutOptimizer(BaseBehaveVideoData):
         frame_inds = np.array([frames_gt.index(x) for x in frames_pr])
         if isinstance(pack_data['joints2d'], list):
             pack_data['joints2d'] = np.stack(pack_data['joints2d'])
-        joints_2d = pack_data['joints2d'][frame_inds, view_id] # (L, 25, 3)
+        joints_2d = pack_data['joints2d'][frame_inds, view_id] # (L, J, 3), J=25 or 17
         op_thres = self.cfg.op_thres
+
+        # select landmark regressor based on keypoint dimension
+        num_kpts = joints_2d.shape[1]
+        if num_kpts == 17:
+            self.landmark = CocoBodyLandmarks(SMPL_ASSETS_ROOT)
 
         # use predicted contacts 
         if 'contact_logits' in pth_data['pr']:
