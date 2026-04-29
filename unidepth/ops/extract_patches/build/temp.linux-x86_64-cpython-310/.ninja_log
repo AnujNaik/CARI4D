@@ -1,0 +1,4 @@
+# ninja log v5
+1	8674	1776297615690118210	/home/anuj/CARI4D/unidepth/ops/extract_patches/build/temp.linux-x86_64-cpython-310/home/anuj/CARI4D/unidepth/ops/extract_patches/src/cpu/extract_patches_cpu.o	fe04e063f42e2504
+1	8906	1776297615927125836	/home/anuj/CARI4D/unidepth/ops/extract_patches/build/temp.linux-x86_64-cpython-310/home/anuj/CARI4D/unidepth/ops/extract_patches/src/extract_patches.o	b3b516cbc69afd92
+1	52152	1776297659160512073	/home/anuj/CARI4D/unidepth/ops/extract_patches/build/temp.linux-x86_64-cpython-310/home/anuj/CARI4D/unidepth/ops/extract_patches/src/cuda/extract_patches_kernel.o	f78a129b21445835

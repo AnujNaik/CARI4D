@@ -31,7 +31,7 @@ video=${video}  cam_id=0 wild_video=True \
 outpath=output/coconet
 
 # Step 6: run joint optimization
-python learning/training/opt_refineout.py num_steps=3000 w_acc_v=600 w_contact=300  save_name=optv2 batch_size=192 opt_rot=True \
+python learning/training/opt_refineout.py num_steps=3000 w_acc_v=600 w_contact=300  save_name=optv2 batch_size=128 opt_rot=True \
 opt_trans=True w_temp=1000 w_sil=0.002 w_contact=200.0 w_pen=2.0 w_j2d=0.006 opt_smpl_trans=False opt_betas=False  \
 pth_file=output/coconet/cari4d-release+step031397_demo/${video_prefix}.pth  wild_video=True \
 video_root=data/cari4d-demo/wild/videos/ \

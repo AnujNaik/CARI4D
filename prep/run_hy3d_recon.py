@@ -232,7 +232,10 @@ def main():
 
     if args.skip_hy3d:
         print('Skipping Hunyuan3D inference (--skip_hy3d)')
-        return
+        glb_path = osp.join(outdir, glb_name)
+        if not osp.isfile(glb_path):
+            print(f'Error: GLB not found at {glb_path}')
+            return
 
     # Step 5: Run Hunyuan3D
     glb_path = run_hunyuan3d(rgba_img, outdir, glb_name, seed=args.seed)

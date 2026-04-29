@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+
+# Data / outputs
+data/
+output/
+experiments/
+
+# Models / weights
+weights/
+*.pth
+
+# Large media
+*.zip
+
+# External repos
+Hunyuan3D-2/
+VolumetricSMPL/
+
+# Misc
+*.log
